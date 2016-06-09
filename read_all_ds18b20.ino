@@ -87,7 +87,7 @@ void loop(void)
     // print the device information
     printAddress(deviceAddress);
     Serial.print(" Temp C: ");
-    Serial.println(tempC);
+    Serial.println(tempC,4);
   }
 
   delay(60000);
