@@ -13,9 +13,6 @@ OneWire oneWire(ONE_WIRE_BUS);
 // Pass our oneWire reference to Dallas Temperature. 
 DallasTemperature sensors(&oneWire);
 
-// arrays to hold device addresses
-DeviceAddress insideThermometer, outsideThermometer;
-
 int count=0;
 
 void setup(void)
@@ -54,6 +51,17 @@ void setup(void)
     Serial.print(sensors.getResolution(deviceAddress), DEC); 
     Serial.println();
   }
+
+  //print device addresses in csv
+  for (int i=0;i<count;i++) {
+    if (!sensors.getAddress(deviceAddress, i)) {
+      Serial.print("Unable to find address for Device "); 
+      Serial.println(i);
+    }
+    printAddress(deviceAddress);
+    Serial.print(" , ");
+  }
+  Serial.println();
 }
 
 // function to print a device address
@@ -71,9 +79,9 @@ void loop(void)
 { 
   // call sensors.requestTemperatures() to issue a global temperature 
   // request to all devices on the bus
-  Serial.print("Requesting temperatures...");
+//  Serial.print("Requesting temperatures...");
   sensors.requestTemperatures();
-  Serial.println("DONE");
+//  Serial.println("DONE");
 
   DeviceAddress deviceAddress;
   float tempC;
@@ -84,11 +92,10 @@ void loop(void)
       Serial.println(i);
     }
     tempC = sensors.getTempC(deviceAddress);
-    // print the device information
-    printAddress(deviceAddress);
-    Serial.print(" Temp C: ");
-    Serial.println(tempC,4);
+    Serial.print(tempC,4);
+    Serial.print(" , ");
   }
+  Serial.println();
 
   delay(60000);
 }
